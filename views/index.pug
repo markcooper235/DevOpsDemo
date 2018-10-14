@@ -3,3 +3,10 @@ extends layout
 block content
   h1= title
   p Welcome to #{title}
+  
+  P This Application Started: #{start_time}
+
+  p It has been running for: #{uptime}
+
+  p Following uniq IPs have been found in the the access Log: 
+  p #{ip_command_results} 
