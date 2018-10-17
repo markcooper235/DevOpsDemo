@@ -11,7 +11,7 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
 logger.token('RealIP', function getRealIP (req) {
-	return req.RelaIP
+	return req.RealIP
 });
 
 var app = express();
@@ -54,7 +54,7 @@ function assignRealIP (req, res, next) {
 	else {
 		req.RealIP = req.ip;
 	}
-        next();
+	next();
 }
 
 module.exports = app;
