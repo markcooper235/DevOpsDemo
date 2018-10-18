@@ -3,7 +3,8 @@ var router = express.Router();
 var exec = require("child_process").exec;
 var start_time = new Date();
 
-const ip_display_command = "cat ./access.log |awk '{print $1}' |sort |uniq -c |sort -n";
+//const ip_display_command = "cat ./access.log |awk '{print $1}' |sort |uniq -c |sort -n";
+const ip_display_command = "cat /var/log/nginx/access.log |awk '{print $1}' |sort |uniq -c |sort -n";
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -14,7 +15,8 @@ router.get('/', function(req, res, next) {
    res.render('index', { title: 'My IP List App',
                          start_time: start_time,
                          uptime: uptime,
-                         ip_command_results: stdout.replace("\n","<br>")});
+                         ip_command_results: stdout.replace("\n","<br>")
+                       });
    }); 
 });
 
