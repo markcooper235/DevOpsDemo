@@ -11,11 +11,10 @@ router.get('/', function(req, res, next) {
    var uptime = format(time);
    exec(ip_display_command, function (err, stdout, stderr) { 
    if (err) handleError();
-   console.log(stdout); 
    res.render('index', { title: 'My IP List App',
                          start_time: start_time,
                          uptime: uptime,
-                         ip_command_results: stdout.replace("\n","<br>")
+                         ip_command_results: stdout.replace(/\n/g,"<br>")
                        });
    }); 
 });
