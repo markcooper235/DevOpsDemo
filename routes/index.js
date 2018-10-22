@@ -15,7 +15,7 @@ router.get('/', function(req, res, next) {
                          start_time: start_time,
                          uptime: uptime,
                          ip_command_results: stdout.replace(/\n/g,"<br>"),
-	                 headers: JSON.stringify(req.headers)
+	                 externalIP: getExternalIP(req.headers) 
                        });
    }); 
 });
@@ -31,4 +31,14 @@ function format(seconds){
 	          var seconds = Math.floor(seconds % 60);
 
 	          return pad(hours) + ':' + pad(minutes) + ':' + pad(seconds);
+}
+
+function getExternalIP(headers){
+	var header = headers['x-forwarded-for'];
+	if(typeof header === "undefined") {
+		return "External IP Header Not defined";
+	}
+	else {
+		return header.split(',')[0];
+	}
 }
