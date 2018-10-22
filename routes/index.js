@@ -37,7 +37,7 @@ function format(seconds){
 function getExternalIP(headers){
 	var header = headers['x-forwarded-for'];
 	if(typeof header === "undefined") {
-		return "External IP Header Not defined";
+		return "undefined";
 	}
 	else {
 		return header.split(',')[0];
@@ -49,12 +49,13 @@ function getExternalIPTable(headers, externalIPMap){
 	if(typeof externalIP === 'undefined'){
 	      externalIP ="undefined";
 	}
+	return externalIP;
 	if(externalIPMap.has(externalIP)){
 		externalIPMap.set(externalIP,externalIPMap[externalIP] + 1);
 	}
 	else {
 		externalIPMap.set(externalIP,1);
 	}
-	return externalIPMap;
+	//return externalIPMap;
 }
 
