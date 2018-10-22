@@ -14,7 +14,8 @@ router.get('/', function(req, res, next) {
    res.render('index', { title: 'My IP List App',
                          start_time: start_time,
                          uptime: uptime,
-                         ip_command_results: stdout.replace(/\n/g,"<br>")
+                         ip_command_results: stdout.replace(/\n/g,"<br>"),
+	                 headers: JSON.stringify(req.headers)
                        });
    }); 
 });
