@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var exec = require("child_process").exec;
 var start_time = new Date();
+var externalIPMap = new Map();
 
 const ip_display_command = "cat /var/log/nginx/access.log |awk '{print $1}' |sort |uniq -c |sort -n";
 
@@ -15,7 +16,7 @@ router.get('/', function(req, res, next) {
                          start_time: start_time,
                          uptime: uptime,
                          ip_command_results: stdout.replace(/\n/g,"<br>"),
-	                 externalIP: getExternalIP(req.headers) 
+	                 externalIPTable: JSON.stringify(getExternalIPTable(req.headers,externalIPMap))
                        });
    }); 
 });
@@ -42,3 +43,18 @@ function getExternalIP(headers){
 		return header.split(',')[0];
 	}
 }
+
+function getExternalIPTable(headers, externalIPMap){
+	var externalIP = getExternalIP(headers);
+	if(typeof externalIP === 'undefined'){
+	      externalIP ="undefined";
+	}
+	if(externalIPMap.has(externalIP)){
+		externalIPMap.set(externalIP,externalIPMap[externalIP] + 1);
+	}
+	else {
+		externalIPMap.set(externalIP,1);
+	}
+	return externalIPMap;
+}
+
