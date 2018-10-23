@@ -2,7 +2,6 @@ var express = require('express');
 var router = express.Router();
 var exec = require("child_process").exec;
 var start_time = new Date();
-var externalIPMap = new Map();
 
 const ip_display_command = "cat /var/log/nginx/access.log |awk '{print $1}' |sort |uniq -c |sort -n";
 
@@ -10,13 +9,15 @@ const ip_display_command = "cat /var/log/nginx/access.log |awk '{print $1}' |sor
 router.get('/', function(req, res, next) {
    var time = process.uptime();
    var uptime = format(time);
+   var externalIP = getExternalIP(req.headers);
    exec(ip_display_command, function (err, stdout, stderr) { 
    if (err) handleError();
    res.render('index', { title: 'My IP List App',
                          start_time: start_time,
                          uptime: uptime,
                          ip_command_results: stdout.replace(/\n/g,"<br>"),
-	                 externalIPTable: JSON.stringify(getExternalIPTable(req.headers,externalIPMap))
+	                 externalIP: externalIP,
+	   		 externalIPTable: JSON.stringify(getExternalIPTable(externalIP,externalIPMap))
                        });
    }); 
 });
@@ -35,27 +36,22 @@ function format(seconds){
 }
 
 function getExternalIP(headers){
-	var header = headers['x-forwarded-for'];
-	if(typeof header === "undefined") {
-		return "undefined";
-	}
-	else {
+	if('x-forwarded-for' in headers){
+		var header = headers['x-forwarded-for'];
 		return header.split(',')[0];
 	}
+	return "undefined"
 }
 
-function getExternalIPTable(headers, externalIPMap){
-	var externalIP = getExternalIP(headers);
-	if(typeof externalIP === 'undefined'){
-	      externalIP ="undefined";
-	}
-	return externalIP;
-	if(externalIPMap.has(externalIP)){
+function getExternalIPTable(externalIP,externalIPMap){
+	if(externalIP == "undefined"){console.log("undefined") }
+	else if (externalIPMap.has(externalIP)){
 		externalIPMap.set(externalIP,externalIPMap[externalIP] + 1);
 	}
 	else {
 		externalIPMap.set(externalIP,1);
 	}
-	//return externalIPMap;
+	console.log(JSON.stringify(externalIPMap));
+	return externalIPMap;
 }
 
