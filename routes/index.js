@@ -46,7 +46,7 @@ function getExternalIP(headers){
 
 function getExternalIPTable(externalIP,externalIPMap){
 	if(externalIP == "undefined"){console.log("undefined") }
-	else if (externalIPMap.has(externalIP)){
+	else if (externalIP in externalIPMap){
 		externalIPMap[externalIP] = externalIPMap[externalIP] + 1;
 	}
 	else {
