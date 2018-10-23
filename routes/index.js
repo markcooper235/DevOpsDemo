@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var exec = require("child_process").exec;
 var start_time = new Date();
+externalIPMap = {};
 
 const ip_display_command = "cat /var/log/nginx/access.log |awk '{print $1}' |sort |uniq -c |sort -n";
 
@@ -46,10 +47,10 @@ function getExternalIP(headers){
 function getExternalIPTable(externalIP,externalIPMap){
 	if(externalIP == "undefined"){console.log("undefined") }
 	else if (externalIPMap.has(externalIP)){
-		externalIPMap.set(externalIP,externalIPMap[externalIP] + 1);
+		externalIPMap[externalIP] = externalIPMap[externalIP] + 1;
 	}
 	else {
-		externalIPMap.set(externalIP,1);
+		externalIPMap[externalIP] = 1;
 	}
 	console.log(JSON.stringify(externalIPMap));
 	return externalIPMap;
