@@ -18,7 +18,7 @@ router.get('/', function(req, res, next) {
                          uptime: uptime,
                          ip_command_results: stdout.replace(/\n/g,"<br>"),
 	                 externalIP: externalIP,
-	   		 externalIPTable: JSON.stringify(getExternalIPTable(externalIP,externalIPMap))
+	   		 externalIPTable: JSON.stringify(getExternalIPTable(externalIP,externalIPMap),null,4)
                        });
    }); 
 });
